@@ -1,6 +1,6 @@
 <template>
   <div class="about">
-    <div>This is an about pages</div>
+    <div>This is an about pages Admin</div>
   </div>
 </template>
 <script setup lang="ts"></script>
