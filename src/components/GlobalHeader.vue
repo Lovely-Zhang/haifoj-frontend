@@ -1,5 +1,5 @@
 <template>
-  <a-row style="margin-bottom: 16px" align="center">
+  <a-row align="center" :wrap="false">
     <a-col flex="auto">
       <a-menu
         mode="horizontal"
@@ -16,12 +16,9 @@
             <div class="title">HAIF OJ</div>
           </div>
         </a-menu-item>
-        <a-menu-item v-for="item in routes" :key="item.path"
+        <a-menu-item v-for="item in visibleRoutes" :key="item.path"
           >{{ item.name }}
         </a-menu-item>
-        <a-menu-item key="2">Solution</a-menu-item>
-        <a-menu-item key="3">Cloud Service</a-menu-item>
-        <a-menu-item key="4">Cooperation</a-menu-item>
       </a-menu>
     </a-col>
     <a-col flex="100px">
@@ -33,15 +30,40 @@
 <script setup lang="ts">
 import { routes } from "@/router/routes";
 import { useRouter } from "vue-router";
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { useStore } from "vuex";
+import checkAccess from "@/access/checkAccess";
+import AccessEnum from "@/access/accessEnum";
 
 const router = useRouter();
+const store = useStore();
+
+/**
+ * 使用计算属性，当登录用户信息发生变更时，触发菜单栏的重新渲染
+ * 需要展示在页面的路由数组
+ */
+const visibleRoutes = computed(() => {
+  return routes.filter((item, index) => {
+    if (item.meta?.hideInMenu) {
+      return false;
+    }
+    // todo 根据权限过滤菜单
+    if (
+      !checkAccess(store.state.user.loginUser, item?.meta?.access as string)
+    ) {
+      return false;
+    }
+    return true;
+  });
+});
 
 // 默认跳转为主页
 const selectedKey = ref(["/"]);
 
-// 路由跳转后更新跳转的菜单
+/**
+ * 每次路由导航后执行一些逻辑，一般用于页面滚动或统计
+ * 路由跳转后,更新跳转的菜单
+ */
 router.afterEach((to, from, failure) => {
   selectedKey.value = [to.path];
 });
@@ -52,13 +74,10 @@ const doMenuClick = (key: string) => {
   });
 };
 
-const store = useStore();
-// console.log(store.state.user?.loginUser?.userName ?? "未登录");
-
 setTimeout(() => {
   store.dispatch("user/getLoginUser", {
-    // userName: "HAIF",
-    // role: "admin",
+    userName: "HAIF管理员",
+    userRole: AccessEnum.ADMIN,
   });
 }, 3000);
 </script>

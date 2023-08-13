@@ -1,6 +1,7 @@
 <template>
   <div id="basicLayout">
-    <a-layout style="height: 400px">
+    <!-- 最小高度， vh屏幕可视区域-->
+    <a-layout style="min-height: 100vh">
       <a-layout-header class="header">
         <GlobalHeader />
       </a-layout-header>
@@ -40,7 +41,7 @@ import GlobalHeader from "@/components/GlobalHeader.vue";
 #basicLayout .footer {
   background: #efefef;
   padding: 16px;
-  position: absolute;
+  position: static;
   bottom: 0;
   left: 0;
   right: 0;
