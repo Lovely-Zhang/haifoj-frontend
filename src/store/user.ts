@@ -13,7 +13,7 @@ export default {
   namespaced: true,
   state: () => ({
     loginUser: {
-      userName: "点击登录",
+      userName: "未登录",
       userRole: AccessEnum.NOT_LOGIN,
     },
   }),

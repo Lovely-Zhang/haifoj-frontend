@@ -22,7 +22,7 @@ export type OpenAPIConfig = {
 export const OpenAPI: OpenAPIConfig = {
   BASE: "http://localhost:8121",
   VERSION: "1.0",
-  // 改为 true，自动携带 cookie 请求
+  // WITH_CREDENTIALS 改为 true，CREDENTIALS 为 include，自动携带 cookie 请求
   WITH_CREDENTIALS: true,
   CREDENTIALS: "include",
   TOKEN: undefined,
