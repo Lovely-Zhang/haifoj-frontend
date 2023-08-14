@@ -22,7 +22,7 @@
       </a-menu>
     </a-col>
     <a-col flex="100px">
-      <div>{{ store.state.user?.loginUser?.userName ?? "未登录" }}</div>
+      <a-button type="primary" @click="userLogin">{{ buttonText }}</a-button>
     </a-col>
   </a-row>
 </template>
@@ -33,7 +33,6 @@ import { useRouter } from "vue-router";
 import { computed, ref } from "vue";
 import { useStore } from "vuex";
 import checkAccess from "@/access/checkAccess";
-import AccessEnum from "@/access/accessEnum";
 
 const router = useRouter();
 const store = useStore();
@@ -74,12 +73,13 @@ const doMenuClick = (key: string) => {
   });
 };
 
-setTimeout(() => {
-  store.dispatch("user/getLoginUser", {
-    userName: "HAIF管理员",
-    userRole: AccessEnum.ADMIN,
-  });
-}, 3000);
+const buttonText = store.state.user?.loginUser?.userName ?? "未登录";
+
+// 点击跳转到登录页面
+const userLogin = () => {
+  // 使用编程式导航跳转到登录页面
+  router.push("/user/login");
+};
 </script>
 
 <style scoped>
