@@ -62,8 +62,8 @@ export const routes: Array<RouteRecordRaw> = [
     path: "/noAuth",
     name: "无权限",
     component: NoAuthView,
-    // meta: {
-    //   hideInMenu: "true",
-    // },
+    meta: {
+      hideInMenu: "true",
+    },
   },
 ];

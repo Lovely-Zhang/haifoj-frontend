@@ -16,6 +16,7 @@ router.beforeEach(async (to, from, next) => {
   if (!loginUser || !loginUser.userRole) {
     await store.dispatch("user/getLoginUser");
   }
+  // 拿到页面中的 meta 判断当前页是什么权限
   const needAccess = (to.meta?.access as string) ?? AccessEnum.NOT_LOGIN;
   // 如果要跳转，页面必须登录
   if (needAccess !== AccessEnum.NOT_LOGIN) {
