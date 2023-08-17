@@ -4,6 +4,7 @@ import AdminView from "@/views/AdminView.vue";
 import NoAuthView from "@/views/NoAuthView.vue";
 import AccessEnum from "@/access/accessEnum";
 import UserLayout from "@/layouts/UserLayout.vue";
+import PersonalCenterView from "@/views/user/PersonalCenterView.vue";
 import UserLoginView from "@/views/user/UserLoginView.vue";
 import UserRegisterView from "@/views/user/UserRegisterView.vue";
 
@@ -13,6 +14,14 @@ export const routes: Array<RouteRecordRaw> = [
     name: "用户",
     component: UserLayout,
     children: [
+      {
+        path: "/user/personal",
+        name: "个人中心",
+        component: PersonalCenterView,
+        meta: {
+          access: "personal",
+        },
+      },
       {
         path: "/user/login",
         name: "用户登录",

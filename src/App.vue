@@ -28,6 +28,7 @@ const doInit = () => {
   console.log("hello， 欢迎来到我的项目");
 };
 
+// 刚进页面会执行此代码
 onMounted(() => {
   doInit();
 });

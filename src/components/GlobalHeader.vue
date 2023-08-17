@@ -22,7 +22,27 @@
       </a-menu>
     </a-col>
     <a-col flex="100px">
-      <a-button type="primary" @click="userLogin">{{ buttonText }}</a-button>
+      <a-dropdown @select="handleSelect">
+        <a-button
+          type="primary"
+          @click="doMenuClick('/user/login')"
+          v-if="buttonText === '未登录'"
+          >{{ buttonText }}
+        </a-button>
+        <a-button type="primary" v-else>{{ buttonText }}</a-button>
+        <template #content>
+          <!--          <a-doption @click="doMenuClick('/user/login')">个人中心</a-doption>-->
+          <a-doption
+            v-for="item in personal()"
+            :key="item.path"
+            :value="item.path"
+            >{{ item.name }}
+          </a-doption>
+          <a-doption @click="UserControllerService.userLogoutUsingPost()"
+            >退出登录
+          </a-doption>
+        </template>
+      </a-dropdown>
     </a-col>
   </a-row>
 </template>
@@ -30,12 +50,13 @@
 <script setup lang="ts">
 import { routes } from "@/router/routes";
 import { useRouter } from "vue-router";
-import { computed, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { useStore } from "vuex";
 import checkAccess from "@/access/checkAccess";
+import { UserControllerService } from "../../generated/services/UserControllerService";
 
 const router = useRouter();
-const store = useStore();
+let store = useStore();
 
 /**
  * 使用计算属性，当登录用户信息发生变更时，触发菜单栏的重新渲染
@@ -56,6 +77,19 @@ const visibleRoutes = computed(() => {
   });
 });
 
+const personal = () => {
+  return routes[0].children?.filter((item, index) => {
+    if (item.meta?.access !== "personal") {
+      return false;
+    }
+    return true;
+  });
+};
+
+onMounted(() => {
+  console.log(personal(), "dsdsss");
+});
+
 // 默认跳转为主页
 const selectedKey = ref(["/"]);
 
@@ -67,18 +101,27 @@ router.afterEach((to, from, failure) => {
   selectedKey.value = [to.path];
 });
 
+// 点击跳转到对应页面
 const doMenuClick = (key: string) => {
+  // 使用编程式导航跳转到登录页面
   router.push({
     path: key,
   });
 };
 
-const buttonText = store.state.user?.loginUser?.userName ?? "未登录";
+const buttonText = computed(() => {
+  if (store.state.user?.loginUser?.userName !== null) {
+    return store.state.user?.loginUser?.userName;
+  }
+  return "未登录";
+});
 
-// 点击跳转到登录页面
-const userLogin = () => {
-  // 使用编程式导航跳转到登录页面
-  router.push("/user/login");
+const handleSelect = (v: any) => {
+  if (v === "退出登录") {
+    store.state.user = null;
+  }
+  console.log(buttonText);
+  doMenuClick(v);
 };
 </script>
 
@@ -101,5 +144,9 @@ const userLogin = () => {
 .title {
   color: #444;
   margin-left: 16px;
+}
+
+.arco-dropdown-open .arco-icon-down {
+  transform: rotate(180deg);
 }
 </style>
