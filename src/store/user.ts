@@ -34,7 +34,6 @@ export default {
   mutations: {
     updateUser(state, payload) {
       state.loginUser = payload;
-      console.log(payload);
     },
   },
 } as StoreOptions<any>;

@@ -22,23 +22,30 @@
       </a-menu>
     </a-col>
     <a-col flex="100px">
-      <a-dropdown @select="handleSelect">
-        <a-button
-          type="primary"
-          @click="doMenuClick('/user/login')"
-          v-if="buttonText === '未登录'"
-          >{{ buttonText }}
-        </a-button>
-        <a-button type="primary" v-else>{{ buttonText }}</a-button>
-        <template #content>
-          <!--          <a-doption @click="doMenuClick('/user/login')">个人中心</a-doption>-->
+      <a-dropdown :trigger="['hover']" @select="handleSelect">
+        <div class="content">
+          <a-typography-text class="text">{{ buttonText }}</a-typography-text>
+          <a-image
+            width="45"
+            src="https://p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp"
+          />
+        </div>
+        <template #content v-if="buttonText === '未登录'">
+          <a-doption :value="{ value: '/user/login', name: '登录' }"
+            >账号登录
+          </a-doption>
+          <a-doption :value="{ value: '/user/register', name: '注册' }"
+            >账号注册
+          </a-doption>
+        </template>
+        <template #content v-else>
           <a-doption
             v-for="item in personal()"
             :key="item.path"
-            :value="item.path"
+            :value="{ value: item.path, name: item.name }"
             >{{ item.name }}
           </a-doption>
-          <a-doption @click="UserControllerService.userLogoutUsingPost()"
+          <a-doption :value="{ value: '/user/login', name: '退出登录' }"
             >退出登录
           </a-doption>
         </template>
@@ -86,8 +93,9 @@ const personal = () => {
   });
 };
 
+// 钩子函数
 onMounted(() => {
-  console.log(personal(), "dsdsss");
+  // console.log("");
 });
 
 // 默认跳转为主页
@@ -110,18 +118,20 @@ const doMenuClick = (key: string) => {
 };
 
 const buttonText = computed(() => {
-  if (store.state.user?.loginUser?.userName !== null) {
-    return store.state.user?.loginUser?.userName;
+  const userLogin = store.state.user?.loginUser;
+  if (userLogin?.userName !== null) {
+    return userLogin?.userName;
   }
   return "未登录";
 });
 
 const handleSelect = (v: any) => {
-  if (v === "退出登录") {
-    store.state.user = null;
+  if (v.name === "退出登录") {
+    UserControllerService.userLogoutUsingPost();
+    location.reload();
+  } else {
+    doMenuClick(v.value);
   }
-  console.log(buttonText);
-  doMenuClick(v);
 };
 </script>
 
@@ -148,5 +158,15 @@ const handleSelect = (v: any) => {
 
 .arco-dropdown-open .arco-icon-down {
   transform: rotate(180deg);
+}
+
+.content {
+  display: flex; /* 使内部元素水平排列 */
+  align-items: center; /* 垂直居中对齐 */
+  gap: 10px; /* 设置内部元素之间的间距 */
+}
+.content.text {
+  font-size: 18px;
+  font-weight: bold;
 }
 </style>

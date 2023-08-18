@@ -1,10 +1,10 @@
 <template>
   <div id="userLoginView">
-    <h2 style="margin-bottom: 16px">用户登录</h2>
+    <h2 style="margin-bottom: 36px">用户登录</h2>
     <a-form
       :model="form"
       @submit="handleSubmit"
-      style="max-width: 480px; margin: 0 auto"
+      style="max-width: 440px; margin: 0 auto"
       label-align="left"
       auto-label-width
     >
