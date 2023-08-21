@@ -16,10 +16,10 @@
           description="图片说明：我的头像"
           width="260"
           footer-position="outer"
-          :preview-visible="visible2"
+          :preview-visible="visible"
           @preview-visible-change="
             () => {
-              visible2 = false;
+              visible = false;
             }
           "
         >
@@ -29,7 +29,7 @@
                 class="action"
                 @click="
                   () => {
-                    visible2 = true;
+                    visible = true;
                   }
                 "
                 ><icon-eye
@@ -77,8 +77,7 @@ import {
 } from "@arco-design/web-vue/es/icon";
 import { useStore } from "vuex";
 
-const visible1 = ref(false);
-const visible2 = ref(false);
+const visible = ref(false);
 
 const onDownLoad = () => {
   alert("download");
@@ -109,8 +108,7 @@ const form = reactive({
 /**
  * 提交表单，执行登录
  */
-const handleSubmit = async (v: string) => {
-  console.log(v);
+const handleSubmit = async () => {
   const res = await UserControllerService.updateMyUserUsingPost(form);
   // 注册成功则跳转到主页，获取个人信息
   if (res.code === 0) {

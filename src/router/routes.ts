@@ -1,5 +1,5 @@
 import { RouteRecordRaw } from "vue-router";
-import HomeView from "@/views/HomeView.vue";
+import ExampleView from "@/views/ExampleView.vue";
 import AdminView from "@/views/AdminView.vue";
 import NoAuthView from "@/views/NoAuthView.vue";
 import AccessEnum from "@/access/accessEnum";
@@ -7,6 +7,8 @@ import UserLayout from "@/layouts/UserLayout.vue";
 import PersonalCenterView from "@/views/user/PersonalCenterView.vue";
 import UserLoginView from "@/views/user/UserLoginView.vue";
 import UserRegisterView from "@/views/user/UserRegisterView.vue";
+import AddQuestionView from "@/views/question/AddQuestionView.vue";
+import ManageQuestionView from "@/views/question/ManageQuestionView.vue";
 
 export const routes: Array<RouteRecordRaw> = [
   {
@@ -40,12 +42,36 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "浏览题目",
-    component: HomeView,
+    component: ExampleView,
+  },
+  {
+    path: "/question/add",
+    name: "添加题目",
+    component: AddQuestionView,
+    meta: {
+      access: AccessEnum.ADMIN,
+    },
+  },
+  {
+    path: "/question/update",
+    name: "修改题目",
+    component: AddQuestionView,
+    meta: {
+      access: AccessEnum.ADMIN,
+    },
+  },
+  {
+    path: "/question/manage",
+    name: "管理题目",
+    component: ManageQuestionView,
+    meta: {
+      access: AccessEnum.ADMIN,
+    },
   },
   {
     path: "/hide",
     name: "隐藏页面",
-    component: HomeView,
+    component: ExampleView,
     meta: {
       hideInMenu: "true",
     },
