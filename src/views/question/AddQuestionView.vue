@@ -1,6 +1,7 @@
 <template>
   <div id="addQuestionView">
-    <h2 class="label">创建题目</h2>
+    <h2 class="label" v-if="!updatePage">创建题目</h2>
+    <h2 class="label" v-else>修改题目</h2>
   </div>
   <a-form :model="form" @submit="handleSubmit" label-align="left">
     <a-form-item field="title" label="题目标题">
@@ -187,7 +188,6 @@ const loadData = async () => {
     if (!form.value.tags) {
       form.value.tags = [];
     } else {
-      console.log(form.value.tags, "dsdsds");
       form.value.tags = JSON.parse(form.value.tags as any);
     }
     if (!form.value.judgeConfig) {
@@ -217,6 +217,7 @@ const loadData = async () => {
 onMounted(() => {
   if (updatePage) {
     loadData();
+    onAnswerChang(form.value.answer);
   }
 });
 
@@ -231,10 +232,11 @@ const handleSubmit = async () => {
     // 创建成功则跳转到主页，获取个人信息
     if (res.code === 0) {
       message.success("更新成功");
-      // await router.push({
-      //   path: "/",
-      //   replace: true,
-      // });
+      await router.push({
+        path: "/",
+        // 用户在导航后后退
+        replace: true,
+      });
     } else {
       message.error("更新失败，原因：" + res.message);
     }
@@ -245,10 +247,10 @@ const handleSubmit = async () => {
     // 创建成功则跳转到主页，获取个人信息
     if (res.code === 0) {
       message.success("创建成功");
-      // await router.push({
-      //   path: "/",
-      //   replace: true,
-      // });
+      await router.push({
+        path: "/",
+        replace: true,
+      });
     } else {
       message.error("创建失败，原因：" + res.message);
     }

@@ -7,8 +7,8 @@
     :data="dataList"
     :pagination="{
       showTotal: true,
-      pageSize: searchParams.pageSize,
       current: searchParams.current,
+      pageSize: searchParams.pageSize,
       total,
     }"
   >
@@ -38,7 +38,7 @@ const total = ref(0);
 const dataList = ref([]);
 const searchParams = reactive({
   current: 1,
-  pageSize: 15,
+  pageSize: 3,
 } as QuestionQueryRequest);
 
 const loadData = async () => {
