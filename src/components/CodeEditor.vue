@@ -4,13 +4,14 @@
 
 <script setup lang="ts">
 import * as monaco from "monaco-editor";
-import { onMounted, ref, toRaw, withDefaults, defineProps } from "vue";
+import { onMounted, ref, toRaw, withDefaults, defineProps, watch } from "vue";
 
 /**
  * 定义组件属性
  */
 interface Props {
-  value: string;
+  code: string;
+  language: string;
   handleChange: (v: string) => void;
 }
 
@@ -19,29 +20,40 @@ interface Props {
  * withDefaults 如果父组件（Props）没有传给定默认值，defineProps 定义类型
  */
 const props = withDefaults(defineProps<Props>(), {
-  value: () => "",
+  code: () => "",
+  language: () => "",
   handleChange: (v: string) => console.log(v),
 });
 
 const codeEditorRef = ref();
 const codeEditor = ref();
 
-const fillValue = () => {
-  if (!codeEditor.value) {
-    return;
-  }
-  // 改变值
-  toRaw(codeEditor.value).setValue("codeEditor 新的值：");
-};
+// const fillValue = () => {
+//   if (!codeEditor.value) {
+//     return;
+//   }
+//   // 改变值
+//   toRaw(codeEditor.value).setValue("codeEditor 新的值：");
+// };
 
-onMounted(() => {
+/**
+ * 监听选择的语言是否发生改变
+ */
+watch(
+  () => props.language,
+  async () => {
+    loadData();
+  }
+);
+
+const loadData = () => {
   if (!codeEditorRef.value) {
     return;
   }
   codeEditor.value = monaco.editor.create(codeEditorRef.value, {
-    value: props.value, // 默认显示的值
+    value: props.code, // 默认显示的值
     theme: "vs-dark",
-    language: "java",
+    language: props.language,
     minimap: {
       enabled: true, // 开启小地图
     },
@@ -53,11 +65,15 @@ onMounted(() => {
   codeEditor.value.onDidChangeModelContent(() => {
     props.handleChange(toRaw(codeEditor.value).getValue());
   });
+};
+
+onMounted(() => {
+  loadData();
 });
 </script>
 <style scoped>
 .code {
-  height: 400px;
+  height: auto;
   width: auto;
 }
 </style>

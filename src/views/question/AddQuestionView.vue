@@ -2,114 +2,118 @@
   <div id="addQuestionView">
     <h2 class="label" v-if="!updatePage">创建题目</h2>
     <h2 class="label" v-else>修改题目</h2>
-  </div>
-  <a-form :model="form" @submit="handleSubmit" label-align="left">
-    <a-form-item field="title" label="题目标题">
-      <a-input v-model="form.title" placeholder="请输入标题..." class="label" />
-    </a-form-item>
-    <a-form-item field="tags" label="题目标签">
-      <a-input-tag
-        v-model="form.tags"
-        class="label"
-        placeholder="请输入标签"
-        allow-clear
-      />
-    </a-form-item>
-    <a-form-item field="content" label="题目内容">
-      <MdEditor
-        :value="form.content"
-        :handle-change="onContentChang"
-        class="label"
-      />
-    </a-form-item>
-    <a-form-item field="answer" label="题目答案">
-      <CodeEditor
-        :value="form.answer"
-        :handle-change="onAnswerChang"
-        class="label"
-      />
-    </a-form-item>
-    <a-form-item field="judgeConfig" label="判题配置">
-      <a-form-item field="judgeConfig.timeLimit" label="时间限制">
-        <a-input-number
-          style="width: 150px"
-          v-model="form.judgeConfig.timeLimit"
-          placeholder="时间限制"
-          mode="button"
-          min="0"
-        />
-      </a-form-item>
-      <a-form-item field="judgeConfig.memoryLimit" label="内存限制">
-        <a-input-number
-          style="width: 150px"
-          v-model="form.judgeConfig.memoryLimit"
-          placeholder="内存限制"
-          mode="button"
-          min="0"
-        />
-      </a-form-item>
-      <a-form-item field="judgeConfig.stackLimit" label="堆栈限制">
-        <a-input-number
-          style="width: 150px"
-          v-model="form.judgeConfig.stackLimit"
-          placeholder="堆栈限制"
-          mode="button"
-          min="0"
-        />
-      </a-form-item>
-    </a-form-item>
-    <a-form-item field="judgeCase" label="判题用例" class="label">
-      <a-space direction="vertical">
-        <a-form-item
-          v-for="(judgeCaseItem, index) in form.judgeCase"
-          :key="index"
+    <a-form :model="form" @submit="handleSubmit" label-align="left">
+      <a-form-item field="title" label="题目标题">
+        <a-input
+          v-model="form.title"
+          placeholder="请输入标题..."
           class="label"
-          no-style
-        >
-          <a-space
-            direction="vertical"
-            style="min-width: 480px; margin-top: 20px"
-          >
-            <a-form-item
-              :field="judgeCaseItem.input"
-              :label="`输入用例-${index}`"
-            >
-              <a-input
-                v-model="judgeCaseItem.input"
-                placeholder="请输入输入用例..."
-              />
-            </a-form-item>
-            <a-form-item
-              :field="judgeCaseItem.output"
-              :label="`输出用例-${index}`"
-            >
-              <a-input
-                v-model="judgeCaseItem.output"
-                placeholder="请输入输出用例..."
-              />
-            </a-form-item>
-            <div>
-              <a-button
-                @click="handleAdd"
-                :style="{ marginLeft: '300px', marginRight: '20px' }"
-                status="success"
-                >添加用例</a-button
-              >
-              <a-button
-                @click="handleDelete(index)"
-                :style="{ marginLeft: '10px' }"
-                status="danger"
-                >删除用例</a-button
-              >
-            </div>
-          </a-space>
+        />
+      </a-form-item>
+      <a-form-item field="tags" label="题目标签">
+        <a-input-tag
+          v-model="form.tags"
+          class="label"
+          placeholder="请输入标签"
+          allow-clear
+        />
+      </a-form-item>
+      <a-form-item field="content" label="题目内容">
+        <MdEditor
+          :value="form.content"
+          :handle-change="onContentChang"
+          class="label"
+        />
+      </a-form-item>
+      <a-form-item field="answer" label="题目答案">
+        <CodeEditor
+          :value="form.answer"
+          :handle-change="onAnswerChang"
+          class="code"
+        />
+      </a-form-item>
+      <a-form-item field="judgeConfig" label="判题配置">
+        <a-form-item field="judgeConfig.timeLimit" label="时间限制">
+          <a-input-number
+            style="width: 150px"
+            v-model="form.judgeConfig.timeLimit"
+            placeholder="时间限制"
+            mode="button"
+            min="0"
+          />
         </a-form-item>
-      </a-space>
-    </a-form-item>
-    <a-form-item>
-      <a-button type="primary" html-type="submit">提交</a-button>
-    </a-form-item>
-  </a-form>
+        <a-form-item field="judgeConfig.memoryLimit" label="内存限制">
+          <a-input-number
+            style="width: 150px"
+            v-model="form.judgeConfig.memoryLimit"
+            placeholder="内存限制"
+            mode="button"
+            min="0"
+          />
+        </a-form-item>
+        <a-form-item field="judgeConfig.stackLimit" label="堆栈限制">
+          <a-input-number
+            style="width: 150px"
+            v-model="form.judgeConfig.stackLimit"
+            placeholder="堆栈限制"
+            mode="button"
+            min="0"
+          />
+        </a-form-item>
+      </a-form-item>
+      <a-form-item field="judgeCase" label="判题用例" class="label">
+        <a-space direction="vertical">
+          <a-form-item
+            v-for="(judgeCaseItem, index) in form.judgeCase"
+            :key="index"
+            class="label"
+            no-style
+          >
+            <a-space
+              direction="vertical"
+              style="min-width: 480px; margin-top: 20px"
+            >
+              <a-form-item
+                :field="judgeCaseItem.input"
+                :label="`输入用例-${index}`"
+              >
+                <a-input
+                  v-model="judgeCaseItem.input"
+                  placeholder="请输入输入用例..."
+                />
+              </a-form-item>
+              <a-form-item
+                :field="judgeCaseItem.output"
+                :label="`输出用例-${index}`"
+              >
+                <a-input
+                  v-model="judgeCaseItem.output"
+                  placeholder="请输入输出用例..."
+                />
+              </a-form-item>
+              <div>
+                <a-button
+                  @click="handleAdd"
+                  :style="{ marginLeft: '300px', marginRight: '20px' }"
+                  status="success"
+                  >添加用例</a-button
+                >
+                <a-button
+                  @click="handleDelete(index)"
+                  :style="{ marginLeft: '10px' }"
+                  status="danger"
+                  >删除用例</a-button
+                >
+              </div>
+            </a-space>
+          </a-form-item>
+        </a-space>
+      </a-form-item>
+      <a-form-item>
+        <a-button type="primary" html-type="submit">提交</a-button>
+      </a-form-item>
+    </a-form>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -260,8 +264,9 @@ const handleSubmit = async () => {
 
 <style scoped>
 #addQuestionView {
+  margin: 15px 150px 10px 150px;
 }
-.label {
-  width: 900px;
+.code {
+  width: 650px;
 }
 </style>

@@ -1,7 +1,11 @@
 <template>
   <div class="exampleView">
     {{ codeValue }}
-    <CodeEditor :value="codeValue" :handle-change="onCodeChange" />
+    <CodeEditor
+      :value="codeValue"
+      :handle-change="onCodeChange"
+      style="height: 300px"
+    />
     <MdEditor :value="mdValue" :handle-change="onMdChange" />
   </div>
 </template>

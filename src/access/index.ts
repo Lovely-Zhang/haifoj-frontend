@@ -10,18 +10,23 @@ import AccessEnum from "@/access/accessEnum";
 import checkAccess from "@/access/checkAccess";
 
 router.beforeEach(async (to, from, next) => {
-  const loginUser = store.state.user?.loginUser;
+  let loginUser = store.state.user?.loginUser;
   // console.log("登录用户信息", loginUser);
   // 如果之前没登录过，则自动登录
   if (!loginUser || !loginUser.userRole) {
     await store.dispatch("user/getLoginUser");
+    loginUser = store.state.user?.loginUser;
   }
   // 拿到页面中的 meta 判断当前页是什么权限
   const needAccess = (to.meta?.access as string) ?? AccessEnum.NOT_LOGIN;
   // 如果要跳转，页面必须登录
   if (needAccess !== AccessEnum.NOT_LOGIN) {
     // 如果没登录，则跳转到登录页面
-    if (!loginUser || !loginUser.userRole) {
+    if (
+      !loginUser ||
+      !loginUser.userRole ||
+      loginUser.userRole === AccessEnum.NOT_LOGIN
+    ) {
       // to.fullPath 拿到当前页面要跳转的完整的路由
       next(`user/login?redirect=${to.fullPath}`);
       return;
@@ -35,5 +40,3 @@ router.beforeEach(async (to, from, next) => {
   // 前边检查都通过了，这个函数会调用 next，允许路由导航继续，不调用的话，路由导航会被阻止
   next();
 });
-
-import { mapState } from "vuex";

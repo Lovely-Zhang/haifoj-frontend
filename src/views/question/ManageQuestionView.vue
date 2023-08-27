@@ -1,28 +1,29 @@
 <template>
   <div id="manageQuestionView">
-    <h2>管理题目</h2>
+    <h2 style="margin: 10px 10px 20px 20px">管理题目</h2>
+    <a-table
+      :columns="columns"
+      :data="dataList"
+      :pagination="{
+        showTotal: true,
+        current: searchParams.current,
+        pageSize: searchParams.pageSize,
+        total,
+      }"
+      @page-change="onPageChange"
+    >
+      <template #optional="{ record }">
+        <a-space>
+          <a-button type="primary" @click="doUpdate(record)">修改</a-button>
+          <a-button status="danger" @click="doDelete(record)">删除</a-button>
+        </a-space>
+      </template>
+    </a-table>
   </div>
-  <a-table
-    :columns="columns"
-    :data="dataList"
-    :pagination="{
-      showTotal: true,
-      current: searchParams.current,
-      pageSize: searchParams.pageSize,
-      total,
-    }"
-  >
-    <template #optional="{ record }">
-      <a-space>
-        <a-button type="primary" @click="doUpdate(record)">修改</a-button>
-        <a-button status="danger" @click="doDelete(record)">删除</a-button>
-      </a-space>
-    </template>
-  </a-table>
 </template>
 
 <script setup lang="ts">
-import { onMounted, reactive, ref } from "vue";
+import { onMounted, reactive, ref, watchEffect } from "vue";
 import {
   DeleteRequest,
   QuestionControllerService,
@@ -38,7 +39,7 @@ const total = ref(0);
 const dataList = ref([]);
 const searchParams = reactive({
   current: 1,
-  pageSize: 3,
+  pageSize: 10,
 } as QuestionQueryRequest);
 
 const loadData = async () => {
@@ -51,6 +52,17 @@ const loadData = async () => {
   } else {
     message.error("加载失败" + res.message);
   }
+};
+
+/**
+ * 监听 searchParams 变量，改变时触发页面的重新加载
+ */
+// watchEffect(() => {
+//   loadData();
+// });
+const onPageChange = (current: number) => {
+  searchParams.current = current;
+  loadData();
 };
 
 const doDelete = async (deleteQuestion: DeleteRequest) => {
