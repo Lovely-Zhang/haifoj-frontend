@@ -14,7 +14,6 @@ export default {
   state: () => ({
     loginUser: {
       userName: "未登录",
-      userRole: AccessEnum.NOT_LOGIN,
     },
   }),
   actions: {
