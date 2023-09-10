@@ -42,7 +42,12 @@ const codeEditor = ref();
 watch(
   () => props.language,
   async () => {
-    loadData();
+    if (codeEditor.value) {
+      monaco.editor.setModelLanguage(
+        toRaw(codeEditor.value).getModel(),
+        props.language
+      );
+    }
   }
 );
 

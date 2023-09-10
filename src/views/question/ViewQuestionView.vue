@@ -49,6 +49,7 @@
               <a-option>java</a-option>
               <a-option>cpp</a-option>
               <a-option>go</a-option>
+              <a-option>html</a-option>
             </a-select>
           </a-form-item>
         </a-form>
@@ -58,7 +59,10 @@
           :language="form.language as string"
           :handle-change="doChange"
         />
-        <a-button type="primary" style="width: 150px" @click="doSubmit"
+        <a-button
+          type="primary"
+          style="width: 150px; margin-top: 10px"
+          @click="doSubmit"
           >提交代码</a-button
         >
       </a-col>
@@ -143,10 +147,7 @@ onMounted(() => {
   margin: 0 auto;
 }
 #questionsView .tableTitle {
-  margin: 10px 10px 20px 0px;
-}
-#questionsView .grid-demo {
-  margin-bottom: 16px;
+  margin: 10px 10px 20px 0;
 }
 #questionsView .code {
   margin-top: 7px;
