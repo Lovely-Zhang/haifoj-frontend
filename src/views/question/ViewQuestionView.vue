@@ -81,8 +81,11 @@ import {
 import message from "@arco-design/web-vue/es/message";
 import CodeEditor from "@/components/CodeEditor.vue";
 import MdViewer from "@/components/MdViewer.vue";
+import { useRouter } from "vue-router";
 
 const question = ref<QuestionVO>();
+
+const router = useRouter();
 
 // 定义参数属性
 interface Props {
@@ -127,6 +130,9 @@ const doSubmit = async () => {
   });
   if (res.code === 0) {
     message.success("提交成功，等待判题");
+    router.push({
+      path: "/questionsSubmitView",
+    });
   } else {
     message.error("提交失败，", res.message);
   }

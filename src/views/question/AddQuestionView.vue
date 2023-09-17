@@ -268,5 +268,6 @@ const handleSubmit = async () => {
 }
 .code {
   width: 650px;
+  height: 300px;
 }
 </style>
