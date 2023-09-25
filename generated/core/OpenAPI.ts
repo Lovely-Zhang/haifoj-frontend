@@ -20,6 +20,7 @@ export type OpenAPIConfig = {
 };
 
 export const OpenAPI: OpenAPIConfig = {
+  // 部署记得改为服务器地址
   BASE: "http://localhost:8101",
   VERSION: "1.0",
   // WITH_CREDENTIALS 改为 true，CREDENTIALS 为 include，自动携带 cookie 请求
